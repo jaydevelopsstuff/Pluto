@@ -33,7 +33,6 @@ public class LoginHandler {
             return;
         }
 
-        //player.disconnectGracefully(new NetworkText("Disconnected: Shut the fuck up", NetworkText.Mode.LITERAL));
         player.sendPacket(new ContinueConnecting((short)player.getPlayerId()));
         player.setState(1);
     }
