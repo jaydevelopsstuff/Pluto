@@ -23,6 +23,7 @@ public class NetworkManager {
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)
+                    .childOption(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator(1024, 1024 * 32, 1024*1024))
                     .childOption(ChannelOption.SO_KEEPALIVE, false);
 
             ChannelFuture channelFuture = bootstrap.bind(7777).sync();

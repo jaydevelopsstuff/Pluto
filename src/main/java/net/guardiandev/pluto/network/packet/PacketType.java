@@ -1,6 +1,8 @@
 package net.guardiandev.pluto.network.packet;
 
-import net.guardiandev.pluto.network.packet.server.Disconnect;
+import net.guardiandev.pluto.network.packet.both.PlayerHP;
+import net.guardiandev.pluto.network.packet.both.PlayerSlot;
+import net.guardiandev.pluto.network.packet.client.PlayerBuff;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -9,23 +11,23 @@ import java.lang.reflect.InvocationTargetException;
  * @author Jay
  */
 public enum PacketType {
-    KeepAlive(0, From.SERVER, net.guardiandev.pluto.network.packet.server.KeepAlive.class), // Technically not a real packet
+    KeepAlive(0, From.SERVER), // Technically not a real packet
     ConnectRequest(1, From.CLIENT, net.guardiandev.pluto.network.packet.client.ConnectRequest.class),
     Disconnect(2, From.SERVER, net.guardiandev.pluto.network.packet.server.Disconnect.class),
-    ContinueConnecting(3, From.SERVER),
-    PlayerInfo(4, From.BOTH),
-    PlayerSlot(5, From.BOTH),
-    RequestWorldData(6, From.CLIENT), // AKA ContinueConnecting2
-    WorldInfo(7, From.SERVER),
-    RequestEssentialTiles(8, From.CLIENT),
+    ContinueConnecting(3, From.SERVER, net.guardiandev.pluto.network.packet.server.ContinueConnecting.class),
+    PlayerInfo(4, From.BOTH, net.guardiandev.pluto.network.packet.client.PlayerInfo.class),
+    PlayerSlot(5, From.BOTH, net.guardiandev.pluto.network.packet.both.PlayerSlot.class),
+    RequestWorldData(6, From.CLIENT, net.guardiandev.pluto.network.packet.client.RequestWorldData.class), // AKA ContinueConnecting2
+    WorldInfo(7, From.SERVER, net.guardiandev.pluto.network.packet.server.WorldInfo.class),
+    RequestEssentialTiles(8, From.CLIENT, net.guardiandev.pluto.network.packet.client.RequestEssentialTiles.class),
     Status(9, From.SERVER),
-    SendSection(10, From.SERVER),
-    SectionTileFrame(11, From.SERVER),
-    PlayerSpawn(12, From.CLIENT),
+    SendTileSection(10, From.SERVER),
+    TileSectionFrame(11, From.SERVER),
+    PlayerSpawn(12, From.CLIENT, net.guardiandev.pluto.network.packet.client.PlayerSpawn.class),
     PlayerUpdate(13, From.BOTH),
     PlayerActive(14, From.SERVER),
-    PlayerHp(16, From.BOTH),
-    Tile(17, From.BOTH),
+    PlayerHp(16, From.BOTH, PlayerHP.class),
+    ModifyTile(17, From.BOTH),
     TimeSet(18, From.SERVER),
     DoorUse(19, From.BOTH),
     TileSendSquare(20, From.BOTH),
@@ -43,19 +45,19 @@ public enum PacketType {
     PlaceChest(34, From.BOTH),
     EffectHeal(35, From.BOTH),
     PlayerZone(36, From.BOTH),
-    PasswordRequired(37, From.SERVER),
-    PasswordSend(38, From.CLIENT),
+    PasswordRequired(37, From.SERVER, net.guardiandev.pluto.network.packet.server.PasswordRequired.class),
+    PasswordSend(38, From.CLIENT, net.guardiandev.pluto.network.packet.client.PasswordSend.class),
     RemoveItemOwner(39, From.SERVER),
     NpcTalk(40, From.BOTH),
     PlayerItemAnimation(41, From.BOTH),
     PlayerMana(41, From.BOTH),
-    ManaEffect(42, From.BOTH),
+    ManaEffect(42, From.BOTH, net.guardiandev.pluto.network.packet.both.ManaEffect.class),
     PlayerTeam(45, From.BOTH),
     SignRead(46, From.CLIENT),
     SignNew(47, From.BOTH), // This guy's weird
     LiquidSet(48, From.BOTH),
     CompleteConnectionAndSpawn(49, From.SERVER),
-    PlayerBuff(50, From.BOTH),
+    PlayerBuff(50, From.BOTH, net.guardiandev.pluto.network.packet.client.PlayerBuff.class),
     NpcSpecialEffect(51, From.BOTH),
     ChestUnlock(52, From.BOTH),
     NpcAddBuff(53, From.BOTH),
@@ -73,7 +75,7 @@ public enum PacketType {
     Teleport(65, From.BOTH),
     PlayerHealOther(66, From.BOTH),
     Placeholder(67, From.BOTH), // Special packet type
-    ClientUUID(68, From.CLIENT),
+    ClientUUID(68, From.CLIENT, net.guardiandev.pluto.network.packet.client.ClientUUID.class),
     GetChestName(69, From.BOTH),
     CatchNPC(70, From.CLIENT),
     ReleaseNPC(71, From.CLIENT),
@@ -172,7 +174,7 @@ public enum PacketType {
         try {
             return packetClass.getDeclaredConstructor().newInstance();
         } catch(InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 

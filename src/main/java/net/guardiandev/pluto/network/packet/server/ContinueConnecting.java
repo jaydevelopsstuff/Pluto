@@ -2,20 +2,20 @@ package net.guardiandev.pluto.network.packet.server;
 
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
-import net.guardiandev.pluto.data.NetworkText;
 import net.guardiandev.pluto.network.packet.PacketType;
 
+// AKA SetUserSlot
 @AllArgsConstructor
-public class Disconnect implements ServerPacket {
-    public NetworkText reason;
+public class ContinueConnecting implements ServerPacket {
+    public short playerId;
 
     @Override
     public void writePacket(ByteBuf buf) {
-        reason.serialize(buf);
+        buf.writeByte(playerId);
     }
 
     @Override
     public PacketType getType() {
-        return PacketType.Disconnect;
+        return PacketType.ContinueConnecting;
     }
 }

@@ -8,6 +8,6 @@ import net.guardiandev.pluto.util.ByteBufUtil;
 public interface ClientPacket extends Packet {
     void readPacket(ByteBuf buf);
 
-    default void processPacket(LoginHandler handler) {}
+    void processPacket(LoginHandler handler);
     // void processPacket();
 }

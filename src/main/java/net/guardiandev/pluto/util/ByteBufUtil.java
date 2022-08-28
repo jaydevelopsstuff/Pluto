@@ -14,6 +14,12 @@ public abstract class ByteBufUtil {
         return buf.readCharSequence(length, StandardCharsets.UTF_8).toString();
     }
 
+    public static void writeTString(String s, ByteBuf buf) {
+        byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
+        write7BitEncodedInt(bytes.length, buf);
+        buf.writeCharSequence(s, StandardCharsets.UTF_8);
+    }
+
     public static int read7BitEncodedInt(ByteBuf buf) {
         int num = 0;
         int num2 = 0;
