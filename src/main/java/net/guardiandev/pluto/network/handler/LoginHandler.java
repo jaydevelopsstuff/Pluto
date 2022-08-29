@@ -1,21 +1,20 @@
 package net.guardiandev.pluto.network.handler;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import lombok.Data;
 import net.guardiandev.pluto.Pluto;
+import net.guardiandev.pluto.data.Character;
 import net.guardiandev.pluto.data.NetworkText;
-import net.guardiandev.pluto.entity.Player;
-import net.guardiandev.pluto.manager.PlayerManager;
-import net.guardiandev.pluto.network.packet.client.ConnectRequest;
-import net.guardiandev.pluto.network.packet.client.PlayerSpawn;
-import net.guardiandev.pluto.network.packet.client.RequestEssentialTiles;
-import net.guardiandev.pluto.network.packet.client.RequestWorldData;
+import net.guardiandev.pluto.entity.player.Player;
+import net.guardiandev.pluto.network.packet.both.ManaEffect;
+import net.guardiandev.pluto.network.packet.both.PlayerHP;
+import net.guardiandev.pluto.network.packet.both.PlayerSlot;
+import net.guardiandev.pluto.network.packet.client.*;
 import net.guardiandev.pluto.network.packet.server.*;
 import net.guardiandev.pluto.world.World;
 import net.guardiandev.pluto.world.WorldData;
+
+import java.util.UUID;
 
 @Data
 public class LoginHandler {
@@ -35,6 +34,76 @@ public class LoginHandler {
 
         player.sendPacket(new ContinueConnecting((short)player.getPlayerId()));
         player.setState(1);
+    }
+
+    public void handlePlayerInfo(PlayerInfo packet) {
+        Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
+
+        if(player.getState() != 1) return;
+        Character character = new Character();
+        character.setSkinVariant(packet.skinVariant);
+        character.setHair(packet.hair);
+        character.setName(packet.playerName);
+        character.setHairDye(packet.hairDye);
+        character.setHideVisuals(packet.hideVisuals);
+        character.setHideVisuals2(packet.hideVisuals2);
+        character.setHideMisc(packet.hideMisc);
+        character.setHairColor(packet.hairColor);
+        character.setSkinColor(packet.skinColor);
+        character.setEyeColor(packet.eyeColor);
+        character.setShirtColor(packet.shirtColor);
+        character.setUndershirtColor(packet.undershirtColor);
+        character.setPantsColor(packet.pantsColor);
+        character.setShoeColor(packet.shoeColor);
+        Character.Difficulty difficulty = null;
+        for(Character.Difficulty difficulty1 : Character.Difficulty.values()) {
+            if((packet.difficultyFlags & difficulty1.bit) == difficulty1.bit) difficulty = difficulty1;
+        }
+        if(difficulty == null) {
+            Pluto.logger.warn("Invalid difficulty flags, defaulting to softcore");
+            difficulty = Character.Difficulty.Softcore;
+        }
+        character.setDifficulty(difficulty);
+        character.setExtraAccessory((packet.difficultyFlags & (byte)0b0010000) == 0b00010000);
+        character.setTorchFlags(packet.torchFlags);
+        player.setCharacter(character);
+    }
+
+    public void handleClientUUID(ClientUUID packet) {
+        Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
+
+        if(player.getState() != 1) return;
+        player.setUuid(UUID.fromString(packet.uuidString));
+    }
+
+    public void handlePlayerHP(PlayerHP packet) {
+        Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
+
+        if(player.getState() != 1) return;
+        player.setHp(packet.hp);
+        player.setMaxHp(packet.maxHp);
+    }
+
+    public void handleManaEffect(ManaEffect packet) {
+        Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
+
+        if(player.getState() != 1) return;
+        player.setMana(packet.manaAmount);
+        player.setMaxMana(packet.manaMax);
+    }
+
+    public void handlePlayerBuffs(PlayerBuffs packet) {
+        Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
+
+        if(player.getState() != 1) return;
+        // TODO
+    }
+
+    public void handlePlayerSlot(PlayerSlot packet) {
+        Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
+
+        if(player.getState() != 1) return;
+        // TODO
     }
 
     public void handleRequestWorldData(RequestWorldData packet) {
@@ -68,5 +137,7 @@ public class LoginHandler {
         Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
         if(player.getState() != 3) return;
         player.sendPacket(new FinishedConnectingToServer());
+        player.setPlayState(Player.PlayState.Play);
+        player.setState(0);
     }
 }

@@ -4,12 +4,9 @@ import net.guardiandev.pluto.util.UnsignedByte;
 import net.guardiandev.pluto.world.WorldData;
 import net.guardiandev.pluto.world.WorldDifficulty;
 import net.guardiandev.pluto.world.WorldEvil;
-import net.guardiandev.pluto.world.tile.Block;
-import net.guardiandev.pluto.world.tile.Wall;
-import net.guardiandev.pluto.world.tile.WireType;
+import net.guardiandev.pluto.world.tile.*;
 import net.guardiandev.pluto.world.tracker.DownedTracker;
 import net.guardiandev.pluto.world.World;
-import net.guardiandev.pluto.world.tile.Tile;
 import net.guardiandev.pluto.world.tracker.SavedTracker;
 
 import java.io.FileNotFoundException;
@@ -267,6 +264,9 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
         WorldData wd = new WorldData();
         wd.importantTiles = importance;
         wd.time = time;
+        wd.dayTime = daytime;
+        wd.bloodMoon = bloodMoon;
+        wd.eclipse = eclipse;
         wd.difficulty = difficulty.ID;
         wd.spawnX = spawnTileX;
         wd.spawnY = spawnTileY;
@@ -857,6 +857,9 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
         short tileWallID = -1;
         byte wallColor = 0;
 
+        byte liquidAmount = 0;
+        Liquid liquidType = null;
+
         Block.Shape shape = Block.Shape.Solid;
         WireType wire = null;
 
@@ -867,7 +870,7 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
         if((header1 & 1) == 1) {
             header2 = reader.readByte();
 
-            // Check 1st bit on 2nd header to see if we need a 3nd header
+            // Check 1st bit on 2nd header to see if we need a 3rd header
             if((header2 & 1) == 1) header3 = reader.readByte();
         }
 
@@ -912,11 +915,16 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
         }
 
         // Check for liquids
-        byte liquidType = (byte)((header1 & 24) >> 3);
-        if (liquidType != 0)
-        {
-            /*tile.LiquidAmount =*/ reader.readUnsignedByte();
-            //tile.LiquidType = (LiquidType)liquidType;
+        byte liquidTypeRaw = (byte)((header1 & 24) >> 3);
+        if(liquidTypeRaw != 0) {
+            liquidAmount = reader.readByte();
+            if(liquidTypeRaw == 1) {
+                liquidType = Liquid.Water;
+            } else if(liquidTypeRaw == 2) {
+                liquidType = Liquid.Lava;
+            } else {
+                liquidType = Liquid.Honey;
+            }
         }
 
         // Check if we have data in header 2 other than just telling us we have header 3
@@ -974,7 +982,10 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
 
         Tile tile = new Tile(block, wall, tileX, tileY);
 
-        if(hasActuator) tile.placeActuator();
+        tile.setLiquid(liquidType);
+        tile.setLiquidAmount(liquidAmount);
+        tile.setWire(wire);
+        tile.setHasActuator(hasActuator);
         tile.setActuated(isActuated);
 
         return tile;

@@ -3,6 +3,7 @@ package net.guardiandev.pluto.network.packet.server;
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import net.guardiandev.pluto.network.packet.PacketType;
+import net.guardiandev.pluto.util.BitsByte;
 import net.guardiandev.pluto.util.ByteBufUtil;
 import net.guardiandev.pluto.world.WorldData;
 
@@ -13,7 +14,11 @@ public class WorldInfo implements ServerPacket {
     @Override
     public void writePacket(ByteBuf buf) {
         buf.writeIntLE((int)worldData.time);
-        buf.writeByte(0b10000000);
+        BitsByte moonTypeBb = new BitsByte();
+        moonTypeBb.setBit(0, worldData.dayTime);
+        moonTypeBb.setBit(1, worldData.bloodMoon);
+        moonTypeBb.setBit(2, worldData.dayTime);
+        buf.writeByte(moonTypeBb.toByte());
         buf.writeByte(worldData.moonPhase);
         buf.writeShortLE(worldData.maxTilesX);
         buf.writeShortLE(worldData.maxTilesY);

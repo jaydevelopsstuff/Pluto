@@ -3,6 +3,7 @@ package net.guardiandev.pluto.network.packet.both;
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import net.guardiandev.pluto.network.handler.LoginHandler;
+import net.guardiandev.pluto.network.handler.PlayHandler;
 import net.guardiandev.pluto.network.packet.PacketType;
 import net.guardiandev.pluto.network.packet.client.ClientPacket;
 import net.guardiandev.pluto.network.packet.server.ServerPacket;
@@ -29,6 +30,16 @@ public class PlayerSlot implements ClientPacket, ServerPacket {
     @Override
     public void processPacket(LoginHandler handler) {
 
+    }
+
+    @Override
+    public void processPacket(PlayHandler handler) {
+
+    }
+
+    @Override
+    public UsableStates getUsableState() {
+        return UsableStates.Both;
     }
 
     @Override

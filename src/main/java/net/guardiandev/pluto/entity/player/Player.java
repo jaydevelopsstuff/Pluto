@@ -1,17 +1,14 @@
-package net.guardiandev.pluto.entity;
+package net.guardiandev.pluto.entity.player;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelId;
-import io.netty.util.ReferenceCountUtil;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import net.guardiandev.pluto.Pluto;
+import net.guardiandev.pluto.data.Character;
 import net.guardiandev.pluto.data.NetworkText;
-import net.guardiandev.pluto.network.Client;
 import net.guardiandev.pluto.network.handler.LoginHandler;
+import net.guardiandev.pluto.network.handler.PlayHandler;
 import net.guardiandev.pluto.network.packet.server.Disconnect;
 import net.guardiandev.pluto.network.packet.server.KeepAlive;
 import net.guardiandev.pluto.network.packet.server.ServerPacket;
@@ -19,18 +16,30 @@ import net.guardiandev.pluto.network.packet.server.ServerPacket;
 import java.net.InetSocketAddress;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 @Data
 public class Player {
     private final Channel channel;
     private final InetSocketAddress address;
-    private PlayState playState = PlayState.Login;
-    private int state = 0;
     private LoginHandler loginHandler = new LoginHandler();
-
+    private PlayHandler playHandler = new PlayHandler();
     private final Timer timer = new Timer();
 
     private int playerId = -1;
+    private PlayState playState = PlayState.Login;
+    private int state = 0;
+
+    private Character character;
+    private UUID uuid;
+
+    private double posX;
+    private double posY;
+
+    private int hp;
+    private int maxHp;
+    private int mana;
+    private int maxMana;
 
     public void startKeepAliveTask() {
         timer.scheduleAtFixedRate(new TimerTask() {

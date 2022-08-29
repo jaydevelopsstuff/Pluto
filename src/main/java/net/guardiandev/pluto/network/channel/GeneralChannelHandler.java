@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import net.guardiandev.pluto.Pluto;
-import net.guardiandev.pluto.entity.Player;
+import net.guardiandev.pluto.entity.player.Player;
 import net.guardiandev.pluto.network.packet.PacketType;
 import net.guardiandev.pluto.network.packet.client.ClientPacket;
 
@@ -18,6 +18,7 @@ public class GeneralChannelHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         Player player = new Player(ctx.channel(), (InetSocketAddress)ctx.channel().remoteAddress());
         player.getLoginHandler().setChannel(ctx.channel());
+        player.getPlayHandler().setChannel(ctx.channel());
         player.startKeepAliveTask();
         Pluto.playerManager.newPlayer(ctx.channel().id().asShortText(), player);
         Pluto.logger.info("New player connecting");
@@ -95,7 +96,11 @@ public class GeneralChannelHandler extends ChannelInboundHandlerAdapter {
         }
 
         packet.readPacket(buf);
-        packet.processPacket(player.getLoginHandler());
+        if(player.getPlayState() == Player.PlayState.Login) {
+            packet.processPacket(player.getLoginHandler());
+        } else {
+            packet.processPacket(player.getPlayHandler());
+        }
         if(buf.writerIndex() != size) {
             Pluto.logger.warn("Incomplete reading of packet " + type.name());
         }

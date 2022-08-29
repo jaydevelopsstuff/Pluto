@@ -5,7 +5,9 @@ import java.util.UUID;
 public class WorldData {
     public boolean[] importantTiles;
     public double time;
-    public byte dayMoonFlags;
+    public boolean dayTime;
+    public boolean bloodMoon;
+    public boolean eclipse;
     public byte moonPhase;
     public int maxTilesX;
     public int maxTilesY;

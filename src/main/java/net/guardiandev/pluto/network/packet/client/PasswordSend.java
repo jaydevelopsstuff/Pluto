@@ -2,6 +2,7 @@ package net.guardiandev.pluto.network.packet.client;
 
 import io.netty.buffer.ByteBuf;
 import net.guardiandev.pluto.network.handler.LoginHandler;
+import net.guardiandev.pluto.network.handler.PlayHandler;
 import net.guardiandev.pluto.network.packet.PacketType;
 import net.guardiandev.pluto.util.ByteBufUtil;
 
@@ -21,5 +22,15 @@ public class PasswordSend implements ClientPacket {
     @Override
     public void processPacket(LoginHandler handler) {
 
+    }
+
+    @Override
+    public void processPacket(PlayHandler handler) {
+
+    }
+
+    @Override
+    public UsableStates getUsableState() {
+        return UsableStates.Login;
     }
 }

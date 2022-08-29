@@ -2,7 +2,7 @@ package net.guardiandev.pluto.manager;
 
 import net.guardiandev.pluto.Pluto;
 import net.guardiandev.pluto.data.NetworkText;
-import net.guardiandev.pluto.entity.Player;
+import net.guardiandev.pluto.entity.player.Player;
 
 import java.util.Arrays;
 import java.util.Scanner;

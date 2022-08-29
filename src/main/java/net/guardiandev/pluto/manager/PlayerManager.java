@@ -1,8 +1,8 @@
 package net.guardiandev.pluto.manager;
 
 import lombok.Data;
-import lombok.Getter;
-import net.guardiandev.pluto.entity.Player;
+import net.guardiandev.pluto.entity.player.Player;
+import net.guardiandev.pluto.network.packet.server.ServerPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +11,16 @@ import java.util.Map;
 public class PlayerManager {
     private final Map<String, Player> connectedPlayers = new HashMap<>();
     private final boolean[] playerIds = new boolean[256];
+
+    public void broadcast(ServerPacket packet) {
+        connectedPlayers.forEach((channelId, player) -> player.sendPacket(packet));
+    }
+
+    public void broadcast(ServerPacket packet, String excludeId) {
+        connectedPlayers.forEach((channelId, player) -> {
+            if(!channelId.equals(excludeId)) player.sendPacket(packet);
+        });
+    }
 
     public int allocateAvailablePlayerId() {
         for(int i = 0; i < playerIds.length; i++) {

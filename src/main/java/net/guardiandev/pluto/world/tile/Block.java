@@ -84,6 +84,8 @@ public class Block {
         setID((short)ID);
     }
 
+
+
     public enum Shape {
         Solid(0),
         HalfBrick(1),
@@ -99,8 +101,8 @@ public class Block {
         }
 
         public static Shape fromID(int ID) {
-            for(Shape modification : values()) {
-                if(modification.ID == ID) return modification;
+            for(Shape shape : values()) {
+                if(shape.ID == ID) return shape;
             }
             return null;
         }

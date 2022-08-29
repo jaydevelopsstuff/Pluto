@@ -1,8 +1,8 @@
 package net.guardiandev.pluto.network.packet;
 
 import net.guardiandev.pluto.network.packet.both.PlayerHP;
-import net.guardiandev.pluto.network.packet.both.PlayerSlot;
-import net.guardiandev.pluto.network.packet.client.PlayerBuff;
+import net.guardiandev.pluto.network.packet.both.PlayerUpdate;
+import net.guardiandev.pluto.network.packet.client.PlayerBuffs;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -24,7 +24,7 @@ public enum PacketType {
     SendTileSection(10, From.SERVER),
     TileSectionFrame(11, From.SERVER),
     PlayerSpawn(12, From.CLIENT, net.guardiandev.pluto.network.packet.client.PlayerSpawn.class),
-    PlayerUpdate(13, From.BOTH),
+    PlayerUpdate(13, From.BOTH, net.guardiandev.pluto.network.packet.both.PlayerUpdate.class),
     PlayerActive(14, From.SERVER),
     PlayerHp(16, From.BOTH, PlayerHP.class),
     ModifyTile(17, From.BOTH),
@@ -57,7 +57,7 @@ public enum PacketType {
     SignNew(47, From.BOTH), // This guy's weird
     LiquidSet(48, From.BOTH),
     CompleteConnectionAndSpawn(49, From.SERVER),
-    PlayerBuff(50, From.BOTH, net.guardiandev.pluto.network.packet.client.PlayerBuff.class),
+    PlayerBuffs(50, From.BOTH, PlayerBuffs.class),
     NpcSpecialEffect(51, From.BOTH),
     ChestUnlock(52, From.BOTH),
     NpcAddBuff(53, From.BOTH),

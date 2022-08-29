@@ -2,6 +2,7 @@ package net.guardiandev.pluto.network.packet.client;
 
 import io.netty.buffer.ByteBuf;
 import net.guardiandev.pluto.network.handler.LoginHandler;
+import net.guardiandev.pluto.network.handler.PlayHandler;
 import net.guardiandev.pluto.network.packet.PacketType;
 import net.guardiandev.pluto.util.ByteBufUtil;
 import net.guardiandev.pluto.util.TColor;
@@ -48,7 +49,17 @@ public class PlayerInfo implements ClientPacket {
 
     @Override
     public void processPacket(LoginHandler handler) {
+        handler.handlePlayerInfo(this);
+    }
 
+    @Override
+    public void processPacket(PlayHandler handler) {
+
+    }
+
+    @Override
+    public UsableStates getUsableState() {
+        return UsableStates.Both;
     }
 
     @Override
