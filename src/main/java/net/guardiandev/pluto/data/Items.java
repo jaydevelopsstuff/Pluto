@@ -5126,6 +5126,14 @@ public enum Items {
     PaintingWendy(5123, "The Bereaved", "PaintingWendy", "Furniture", 0, -1, 0),
     PaintingWolfgang(5124, "The Strongman", "PaintingWolfgang", "Furniture", 0, -1, 0);
 
+    public final int id;
+    public final String name;
+    public final String internalName;
+    public final String type;
+    public final int rarity;
+    public final int blockId;
+    public final int blockSubId;
+
     Items(int id, String name, String internalName) {
         this.id = id;
         this.name = name;
@@ -5146,11 +5154,10 @@ public enum Items {
         this.blockSubId = blockSubId;
     }
 
-    public final int id;
-    public final String name;
-    public final String internalName;
-    public final String type;
-    public final int rarity;
-    public final int blockId;
-    public final int blockSubId;
+    public static Items fromId(int id) {
+        for(Items item : values()) {
+            if(item.id == id) return item;
+        }
+        return null;
+    }
 }
