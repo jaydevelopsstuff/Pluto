@@ -1,5 +1,6 @@
 package net.guardiandev.pluto.network.packet;
 
+import net.guardiandev.pluto.network.packet.both.LoadNetModule;
 import net.guardiandev.pluto.network.packet.both.PlayerHP;
 import net.guardiandev.pluto.network.packet.both.PlayerUpdate;
 import net.guardiandev.pluto.network.packet.client.PlayerBuffs;
@@ -89,7 +90,7 @@ public enum PacketType {
     PlaceObject(79, From.BOTH),
     SyncPlayerChestIndex(80, From.SERVER),
     CreateCombatText(81, From.SERVER),
-    LoadNetModule(82, From.CLIENT),
+    LoadNetModule(82, From.CLIENT, net.guardiandev.pluto.network.packet.both.LoadNetModule.class),
     NpcKillCount(83, From.SERVER),
     PlayerStealth(84, From.BOTH),
     ForceItemIntoNearestChest(85, From.CLIENT),

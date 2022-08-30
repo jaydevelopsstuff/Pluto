@@ -70,7 +70,13 @@ public class TColor {
         this.alpha = alpha;
     }
 
-    public static TColor read(ByteBuf buf) {
+    public void serialize(ByteBuf buf) {
+        buf.writeByte((byte)red);
+        buf.writeByte((byte)green);
+        buf.writeByte((byte)blue);
+    }
+
+    public static TColor deserialize(ByteBuf buf) {
         return new TColor(buf.readByte(), buf.readByte(), buf.readByte());
     }
 

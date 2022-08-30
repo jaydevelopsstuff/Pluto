@@ -6,6 +6,7 @@ import net.guardiandev.pluto.Pluto;
 import net.guardiandev.pluto.data.Character;
 import net.guardiandev.pluto.data.NetworkText;
 import net.guardiandev.pluto.entity.player.Player;
+import net.guardiandev.pluto.network.packet.both.LoadNetModule;
 import net.guardiandev.pluto.network.packet.both.ManaEffect;
 import net.guardiandev.pluto.network.packet.both.PlayerHP;
 import net.guardiandev.pluto.network.packet.both.PlayerSlot;
@@ -139,5 +140,6 @@ public class LoginHandler {
         player.sendPacket(new FinishedConnectingToServer());
         player.setPlayState(Player.PlayState.Play);
         player.setState(0);
+       // Pluto.playerManager.broadcast(new LoadNetModule(new LoadNetModule.Text(player.)));
     }
 }

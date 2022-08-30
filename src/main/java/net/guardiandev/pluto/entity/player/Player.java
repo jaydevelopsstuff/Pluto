@@ -47,7 +47,7 @@ public class Player {
             public void run() {
                 sendKeepAlive();
             }
-        }, 1000, 10000);
+        }, 500, 30000);
     }
 
     public ChannelFuture sendKeepAlive() {

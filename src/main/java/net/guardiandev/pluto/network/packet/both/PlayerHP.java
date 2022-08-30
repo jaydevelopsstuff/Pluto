@@ -31,7 +31,7 @@ public class PlayerHP implements ClientPacket, ServerPacket {
 
     @Override
     public void processPacket(PlayHandler handler) {
-
+        handler.handlePlayerHP(this);
     }
 
     @Override

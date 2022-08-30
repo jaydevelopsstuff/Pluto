@@ -36,13 +36,13 @@ public class PlayerInfo implements ClientPacket {
         hideVisuals = buf.readByte();
         hideVisuals2 = buf.readByte();
         hideMisc = buf.readByte();
-        hairColor = TColor.read(buf);
-        skinColor = TColor.read(buf);
-        eyeColor = TColor.read(buf);
-        shirtColor = TColor.read(buf);
-        undershirtColor = TColor.read(buf);
-        pantsColor = TColor.read(buf);
-        shoeColor = TColor.read(buf);
+        hairColor = TColor.deserialize(buf);
+        skinColor = TColor.deserialize(buf);
+        eyeColor = TColor.deserialize(buf);
+        shirtColor = TColor.deserialize(buf);
+        undershirtColor = TColor.deserialize(buf);
+        pantsColor = TColor.deserialize(buf);
+        shoeColor = TColor.deserialize(buf);
         difficultyFlags = buf.readByte();
         torchFlags = buf.readByte();
     }
