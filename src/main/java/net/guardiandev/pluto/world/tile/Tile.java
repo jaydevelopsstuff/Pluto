@@ -5,8 +5,10 @@ import lombok.Setter;
 
 public class Tile {
     @Getter
+    @Setter
     private Block block;
     @Getter
+    @Setter
     private Wall wall;
 
     @Getter
@@ -57,6 +59,14 @@ public class Tile {
         this(block, wall);
         this.frameX = (short)frameX;
         this.frameY = (short)frameY;
+    }
+
+    public void removeBlock() {
+        block = null;
+    }
+
+    public void removeWall() {
+        wall = null;
     }
 
     public WireType getWire() {

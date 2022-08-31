@@ -130,7 +130,7 @@ public class SendTileSection implements ServerPacket {
                     if(additBlockByte) buf.writeShortLE(block.getID());
                     else buf.writeByte((byte)block.getID());
 
-                    if(Pluto.getWorld().getWorldData().importantTiles[block.getID()]) {
+                    if(Pluto.world.getWorldData().importantTiles[block.getID()]) {
                         buf.writeShortLE(block.getFrameX());
                         buf.writeShortLE(block.getFrameY());
                     }

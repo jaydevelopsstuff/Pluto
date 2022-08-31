@@ -1,6 +1,7 @@
 package net.guardiandev.pluto.network.packet;
 
 import net.guardiandev.pluto.network.packet.both.LoadNetModule;
+import net.guardiandev.pluto.network.packet.both.ModifyTile;
 import net.guardiandev.pluto.network.packet.both.PlayerHP;
 import net.guardiandev.pluto.network.packet.both.PlayerUpdate;
 import net.guardiandev.pluto.network.packet.client.PlayerBuffs;
@@ -28,7 +29,7 @@ public enum PacketType {
     PlayerUpdate(13, From.BOTH, net.guardiandev.pluto.network.packet.both.PlayerUpdate.class),
     PlayerActive(14, From.SERVER),
     PlayerHp(16, From.BOTH, PlayerHP.class),
-    ModifyTile(17, From.BOTH),
+    ModifyTile(17, From.BOTH, net.guardiandev.pluto.network.packet.both.ModifyTile.class),
     TimeSet(18, From.SERVER),
     DoorUse(19, From.BOTH),
     TileSendSquare(20, From.BOTH),

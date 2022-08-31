@@ -110,14 +110,14 @@ public class LoginHandler {
     public void handleRequestWorldData(RequestWorldData packet) {
         Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
         if(player.getState() != 1) return;
-        player.sendPacket(new WorldInfo(Pluto.getWorld().getWorldData()));
+        player.sendPacket(new WorldInfo(Pluto.world.getWorldData()));
         player.setState(2);
     }
 
     public void handleRequestEssentialTiles(RequestEssentialTiles packet) {
         Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
         if(player.getState() != 2) return;
-        World world = Pluto.getWorld();
+        World world = Pluto.world;
         WorldData worldData = world.getWorldData();
 
         // Send Tile Sections
@@ -140,6 +140,6 @@ public class LoginHandler {
         player.sendPacket(new FinishedConnectingToServer());
         player.setPlayState(Player.PlayState.Play);
         player.setState(0);
-       // Pluto.playerManager.broadcast(new LoadNetModule(new LoadNetModule.Text(player.)));
+        // TODO
     }
 }

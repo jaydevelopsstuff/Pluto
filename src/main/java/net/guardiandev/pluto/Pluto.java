@@ -23,9 +23,7 @@ public class Pluto {
     public static final PlayerManager playerManager = new PlayerManager();
     public static final ConsoleManager consoleManger = new ConsoleManager();
 
-    @Getter
-    @Setter
-    private static World world;
+    public static World world;
     public static void start() {
         logger.info("Starting server...");
 
