@@ -1,38 +1,36 @@
 package net.guardiandev.pluto.manager;
 
 import net.guardiandev.pluto.Pluto;
+import net.guardiandev.pluto.console.command.HelpCommand;
+import net.guardiandev.pluto.console.command.StopCommand;
 import net.guardiandev.pluto.data.NetworkText;
 import net.guardiandev.pluto.entity.player.Player;
+import net.jay.solo.Command;
 
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ConsoleManager {
-    private final Executor executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Scanner scanner = new Scanner(System.in);
     private boolean running = true;
 
+    private final Command[] commands = new Command[]{
+            new HelpCommand(), new StopCommand()
+    };
+
     public void start() {
         executor.execute(() -> {
-            String line = null;
+            String line;
             while(running && (line = scanner.nextLine()) != null) {
-                String command = line.split(" ")[0].trim();
-                String[] args = Arrays.stream(line.split(" ")).skip(1).toArray(String[]::new);
+                for(Command command : commands) {
+                    if(!line.toLowerCase().startsWith(command.getName().toLowerCase())) continue;
+                    String[] args = Arrays.stream(line.split(" ")).skip(1).toArray(String[]::new);
 
-                if(command.equalsIgnoreCase("p")) {
-                    for(Player player : Pluto.playerManager.getConnectedPlayers().values()) {
-                        System.out.println(player.getAddress().getHostName() + ": " + player.getPlayerId());
-                    }
-                }
-
-                if(command.equalsIgnoreCase("dc")) {
-                    if(args.length < 1) continue;
-                    int id = Integer.parseInt(args[0]);
-                    for(Player player : Pluto.playerManager.getConnectedPlayers().values()) {
-                        if(player.getPlayerId() == id) player.disconnectGracefully(new NetworkText("Get fucked!", NetworkText.Mode.LITERAL));
-                    }
+                    command.execute(line, args);
                 }
             }
         });
@@ -40,5 +38,6 @@ public class ConsoleManager {
 
     public void shutdown() {
         running = false;
+        executor.shutdown();
     }
 }

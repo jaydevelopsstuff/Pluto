@@ -1,4 +1,4 @@
-package net.guardiandev.pluto.data;
+package net.guardiandev.pluto.data.item;
 
 public enum ItemsTwo {
     ZebraSwallowtailButterfly(2000, "Zebra Swallowtail Butterfly", "ZebraSwallowtailButterfly", "Critter", 3, -1, 0),

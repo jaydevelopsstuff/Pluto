@@ -26,7 +26,7 @@ public class Character {
 
     @RequiredArgsConstructor
     public enum Difficulty {
-        Journey((byte)0b00001000),
+        Journey((byte)0b00010000),
         Softcore((byte)0b00000001),
         Mediumcore((byte)0b00000010),
         Hardcore((byte)0b00000100);

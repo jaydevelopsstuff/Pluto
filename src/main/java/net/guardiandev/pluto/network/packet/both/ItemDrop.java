@@ -9,7 +9,7 @@ import net.guardiandev.pluto.network.packet.client.ClientPacket;
 import net.guardiandev.pluto.network.packet.server.ServerPacket;
 
 @AllArgsConstructor
-public class UpdateItemDrop2 implements ClientPacket, ServerPacket {
+public class ItemDrop implements ClientPacket, ServerPacket {
     public short itemUid;
     public float posX;
     public float posY;
@@ -20,7 +20,7 @@ public class UpdateItemDrop2 implements ClientPacket, ServerPacket {
     public byte noDelay;
     public short itemNetId;
 
-    public UpdateItemDrop2() {
+    public ItemDrop() {
     }
 
     @Override
@@ -65,6 +65,6 @@ public class UpdateItemDrop2 implements ClientPacket, ServerPacket {
 
     @Override
     public PacketType getType() {
-        return PacketType.UpdateItemDrop;
+        return PacketType.ItemDrop;
     }
 }
