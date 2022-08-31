@@ -31,7 +31,8 @@ public class ConsoleManager {
                     if(args.length < 1) continue;
                     int id = Integer.parseInt(args[0]);
                     for(Player player : Pluto.playerManager.getConnectedPlayers().values()) {
-                        if(player.getPlayerId() == id) player.disconnectGracefully(new NetworkText("Get fucked!", NetworkText.Mode.LITERAL));
+                        if(player.getPlayerId() == id)
+                            player.disconnectGracefully(new NetworkText("Diconnected", NetworkText.Mode.LITERAL));
                     }
                 }
             }
