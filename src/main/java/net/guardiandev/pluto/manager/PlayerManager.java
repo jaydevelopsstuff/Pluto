@@ -40,6 +40,13 @@ public class PlayerManager {
         return connectedPlayers.get(shortChannelId);
     }
 
+    public Player getPlayer(int playerId) {
+        for(Player player : connectedPlayers.values()) {
+            if(player.getPlayerId() == playerId) return player;
+        }
+        return null;
+    }
+
     public Player newPlayer(String shortChannelId, Player player) {
         connectedPlayers.put(shortChannelId, player);
         return connectedPlayers.get(shortChannelId);
