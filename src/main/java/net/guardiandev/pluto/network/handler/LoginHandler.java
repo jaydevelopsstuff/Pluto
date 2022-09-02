@@ -6,10 +6,7 @@ import net.guardiandev.pluto.Pluto;
 import net.guardiandev.pluto.data.Character;
 import net.guardiandev.pluto.data.NetworkText;
 import net.guardiandev.pluto.entity.player.Player;
-import net.guardiandev.pluto.network.packet.both.LoadNetModule;
-import net.guardiandev.pluto.network.packet.both.ManaEffect;
-import net.guardiandev.pluto.network.packet.both.PlayerHP;
-import net.guardiandev.pluto.network.packet.both.PlayerSlot;
+import net.guardiandev.pluto.network.packet.both.*;
 import net.guardiandev.pluto.network.packet.client.*;
 import net.guardiandev.pluto.network.packet.server.*;
 import net.guardiandev.pluto.world.World;
@@ -140,6 +137,12 @@ public class LoginHandler {
         player.sendPacket(new FinishedConnectingToServer());
         player.setPlayState(Player.PlayState.Play);
         player.setState(0);
-        // TODO
+
+        for(Player player1 : Pluto.playerManager.getConnectedPlayers().values()) {
+            if(player1 == player) continue;
+            player.fullSync(player1.getChannel());
+        }
+
+        Pluto.logger.info("Player " + player.getCharacter().getName() + " (" + player.getPlayerId() + ") has joined.");
     }
 }

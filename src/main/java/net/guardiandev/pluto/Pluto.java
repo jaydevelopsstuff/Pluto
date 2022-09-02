@@ -2,9 +2,12 @@ package net.guardiandev.pluto;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.guardiandev.pluto.data.NetworkText;
+import net.guardiandev.pluto.entity.player.Player;
 import net.guardiandev.pluto.manager.ConsoleManager;
 import net.guardiandev.pluto.manager.PlayerManager;
 import net.guardiandev.pluto.manager.NetworkManager;
+import net.guardiandev.pluto.util.FileUtil;
 import net.guardiandev.pluto.world.World;
 import net.guardiandev.pluto.world.WorldData;
 import net.guardiandev.pluto.world.loader.ReLogicWorldLoader;
@@ -27,6 +30,8 @@ public class Pluto {
     public static void start() {
         logger.info("Starting server...");
 
+        long timeBefore = System.currentTimeMillis();
+
         logger.info("Loading world...");
         try {
             ReLogicWorldLoader worldLoader = new ReLogicWorldLoader("./worlds/world.wld");
@@ -41,5 +46,22 @@ public class Pluto {
         networkManager.startNetwork();
 
         consoleManger.start();
+
+        logger.info("Started server in " + ((System.currentTimeMillis() - timeBefore) / 1000D) + "s.");
+    }
+
+    public static void stop() throws InterruptedException {
+        logger.info("Shutting down...");
+
+        long timeBefore = System.currentTimeMillis();
+        for(Player player : playerManager.getConnectedPlayers().values()) {
+            player.disconnectGracefully(new NetworkText("Server shutting down", NetworkText.Mode.LITERAL));
+            player.destroy();
+        }
+
+        networkManager.shutdown();
+        consoleManger.shutdown();
+
+        logger.info("Shut down in " + ((System.currentTimeMillis() - timeBefore) / 1000D) + "s.");
     }
 }

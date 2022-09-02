@@ -8,6 +8,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import net.guardiandev.pluto.network.channel.GeneralChannelHandler;
 
 public class NetworkManager {
+    private ChannelFuture future;
     private EventLoopGroup bossGroup = new NioEventLoopGroup();
     private EventLoopGroup workerGroup = new NioEventLoopGroup();
 
@@ -26,9 +27,9 @@ public class NetworkManager {
                     .childOption(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator(1024, 1024 * 32, 1024*1024))
                     .childOption(ChannelOption.SO_KEEPALIVE, false);
 
-            ChannelFuture channelFuture = bootstrap.bind(7777).sync();
+            future = bootstrap.bind(7777).sync();
 
-            channelFuture.channel().closeFuture().addListener((ChannelFutureListener)future -> {
+            future.channel().closeFuture().addListener((ChannelFutureListener)future -> {
                 closed();
             });
             return true;
@@ -41,6 +42,7 @@ public class NetworkManager {
     public void shutdown() throws InterruptedException {
         bossGroup.shutdownGracefully().sync();
         workerGroup.shutdownGracefully().sync();
+        future.channel().closeFuture().sync();
     }
 
     private void closed() {

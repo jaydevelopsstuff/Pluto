@@ -1,12 +1,15 @@
 package net.guardiandev.pluto.world;
 
 import lombok.Data;
+import net.guardiandev.pluto.data.item.Item;
 import net.guardiandev.pluto.world.tile.Tile;
 
 @Data
 public class World {
     private WorldData worldData;
     private Tile[][] tiles;
+
+    private Item[] items;
 
     public World() {
     }

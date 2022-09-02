@@ -2,11 +2,12 @@ package net.guardiandev.pluto.util;
 
 import java.io.*;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class FileUtil {
-    private final Executor executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     //
     // ASYNC
@@ -138,5 +139,9 @@ public class FileUtil {
         executor.execute(() -> {
             callback.accept(file.delete());
         });
+    }
+
+    public void shutdown() {
+        executor.shutdown();
     }
 }

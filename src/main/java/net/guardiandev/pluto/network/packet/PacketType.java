@@ -1,15 +1,13 @@
 package net.guardiandev.pluto.network.packet;
 
-import net.guardiandev.pluto.network.packet.both.LoadNetModule;
-import net.guardiandev.pluto.network.packet.both.ModifyTile;
-import net.guardiandev.pluto.network.packet.both.PlayerHP;
-import net.guardiandev.pluto.network.packet.both.PlayerUpdate;
+import net.guardiandev.pluto.network.packet.both.*;
 import net.guardiandev.pluto.network.packet.client.PlayerBuffs;
 
 import java.lang.reflect.InvocationTargetException;
 
 /**
  * An enum for all the Packet Types in Terraria
+ *
  * @author Jay
  */
 public enum PacketType {
@@ -17,7 +15,7 @@ public enum PacketType {
     ConnectRequest(1, From.CLIENT, net.guardiandev.pluto.network.packet.client.ConnectRequest.class),
     Disconnect(2, From.SERVER, net.guardiandev.pluto.network.packet.server.Disconnect.class),
     ContinueConnecting(3, From.SERVER, net.guardiandev.pluto.network.packet.server.ContinueConnecting.class),
-    PlayerInfo(4, From.BOTH, net.guardiandev.pluto.network.packet.client.PlayerInfo.class),
+    PlayerInfo(4, From.BOTH, net.guardiandev.pluto.network.packet.both.PlayerInfo.class),
     PlayerSlot(5, From.BOTH, net.guardiandev.pluto.network.packet.both.PlayerSlot.class),
     RequestWorldData(6, From.CLIENT, net.guardiandev.pluto.network.packet.client.RequestWorldData.class), // AKA ContinueConnecting2
     WorldInfo(7, From.SERVER, net.guardiandev.pluto.network.packet.server.WorldInfo.class),
@@ -33,7 +31,7 @@ public enum PacketType {
     TimeSet(18, From.SERVER),
     DoorUse(19, From.BOTH),
     TileSendSquare(20, From.BOTH),
-    ItemDrop(21, From.BOTH),
+    ItemDrop(21, From.BOTH, net.guardiandev.pluto.network.packet.both.ItemDrop.class),
     ItemOwner(22, From.BOTH),
     NpcUpdate(23, From.SERVER),
     NpcItemStrike(24, From.BOTH),

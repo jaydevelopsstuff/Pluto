@@ -1,4 +1,4 @@
-package net.guardiandev.pluto.data;
+package net.guardiandev.pluto.data.item;
 
 public enum ItemsOne {
     IronPickaxe(1, "Iron Pickaxe", "IronPickaxe", "Tool", 0, -1, 0),

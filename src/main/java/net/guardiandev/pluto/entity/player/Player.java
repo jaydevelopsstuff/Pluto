@@ -1,6 +1,5 @@
 package net.guardiandev.pluto.entity.player;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import lombok.Data;
@@ -9,9 +8,14 @@ import net.guardiandev.pluto.data.Character;
 import net.guardiandev.pluto.data.NetworkText;
 import net.guardiandev.pluto.network.handler.LoginHandler;
 import net.guardiandev.pluto.network.handler.PlayHandler;
+import net.guardiandev.pluto.network.packet.both.ManaEffect;
+import net.guardiandev.pluto.network.packet.both.PlayerHP;
+import net.guardiandev.pluto.network.packet.both.PlayerInfo;
 import net.guardiandev.pluto.network.packet.server.Disconnect;
 import net.guardiandev.pluto.network.packet.server.KeepAlive;
+import net.guardiandev.pluto.network.packet.server.PlayerActive;
 import net.guardiandev.pluto.network.packet.server.ServerPacket;
+import net.guardiandev.pluto.util.NetworkUtil;
 
 import java.net.InetSocketAddress;
 import java.util.Timer;
@@ -50,6 +54,18 @@ public class Player {
         }, 500, 30000);
     }
 
+    public void fullSync(Channel dest) {
+        NetworkUtil.sendPacket(new PlayerActive((byte)playerId, true), dest);
+        NetworkUtil.sendPacket(new PlayerInfo((byte)playerId, character), dest);
+        // Update Player
+        NetworkUtil.sendPacket(new PlayerHP((byte)playerId, (short)hp, (short)maxHp), dest);
+        // Toggle PVP
+        // Player Team
+        NetworkUtil.sendPacket(new ManaEffect((byte)playerId, (short)mana, (short)maxMana), dest);
+
+        // Items
+    }
+
     public ChannelFuture sendKeepAlive() {
         return sendPacket(new KeepAlive());
     }
@@ -59,17 +75,8 @@ public class Player {
     }
 
     public ChannelFuture sendPacket(ServerPacket packet, int byteBufInitialCapacity) {
-        ByteBuf buf = channel.alloc().buffer(byteBufInitialCapacity);
-        buf.writerIndex(2);
-        buf.writeByte((byte)packet.getType().ID);
-        packet.writePacket(buf);
-        int size = buf.writerIndex();
-        buf.setShortLE(0, (short)(size));
-        ByteBuf trimmedBuf = channel.alloc().buffer(size);
-        buf.getBytes(0, trimmedBuf, size);
-        buf.release();
         System.out.println("Send:" + packet.getType().name());
-        return channel.writeAndFlush(trimmedBuf);
+        return NetworkUtil.sendPacket(packet, channel, byteBufInitialCapacity);
     }
 
     public ChannelFuture disconnectGracefully(NetworkText reason) {

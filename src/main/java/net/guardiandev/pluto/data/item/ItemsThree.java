@@ -1,4 +1,4 @@
-package net.guardiandev.pluto.data;
+package net.guardiandev.pluto.data.item;
 
 public enum ItemsThree {
     MagnetFlower(4000, "Magnet Flower", "MagnetFlower", "Accessory", 5, -1, 0),
