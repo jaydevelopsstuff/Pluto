@@ -1,26 +1,26 @@
 package net.guardiandev.pluto;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.google.gson.Gson;
 import net.guardiandev.pluto.data.NetworkText;
+import net.guardiandev.pluto.data.item.Items;
 import net.guardiandev.pluto.entity.player.Player;
 import net.guardiandev.pluto.manager.ConsoleManager;
 import net.guardiandev.pluto.manager.PlayerManager;
 import net.guardiandev.pluto.manager.NetworkManager;
-import net.guardiandev.pluto.util.FileUtil;
 import net.guardiandev.pluto.world.World;
-import net.guardiandev.pluto.world.WorldData;
 import net.guardiandev.pluto.world.loader.ReLogicWorldLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class Pluto {
     public static final String TerrariaVersion = "Terraria248";
 
     public static final Logger logger = LoggerFactory.getLogger("Pluto");
+
+    public static final Gson gson = new Gson();
 
     public static final NetworkManager networkManager = new NetworkManager();
     public static final PlayerManager playerManager = new PlayerManager();
@@ -32,13 +32,24 @@ public class Pluto {
 
         long timeBefore = System.currentTimeMillis();
 
+        logger.info("Loading registries...");
+        try {
+            Items.load();
+        } catch(URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println(Items.get(1));
+
         logger.info("Loading world...");
         try {
             ReLogicWorldLoader worldLoader = new ReLogicWorldLoader("./worlds/world.wld");
             worldLoader.loadWorld();
             world = worldLoader.build();
         } catch(IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            logger.error("Failed to load world, exiting...");
+            return;
         }
         logger.info("Finished loading world");
 

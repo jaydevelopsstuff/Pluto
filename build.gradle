@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation 'org.slf4j:slf4j-api:2.0.0'
+    implementation 'com.google.code.gson:gson:2.9.1'
     implementation 'ch.qos.logback:logback-classic:1.4.0'
     implementation 'com.github.jaydevelopsstuff:Solo:1.0.3'
     implementation 'commons-primitives:commons-primitives:1.0'
