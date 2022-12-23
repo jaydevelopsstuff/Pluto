@@ -36,10 +36,10 @@ public class Pluto {
         try {
             Items.load();
         } catch(URISyntaxException | IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            logger.error("Failed to load item registry, exiting...");
+            return;
         }
-
-        System.out.println(Items.get(1));
 
         logger.info("Loading world...");
         try {
