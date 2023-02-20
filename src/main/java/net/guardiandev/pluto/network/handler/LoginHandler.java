@@ -5,6 +5,8 @@ import lombok.Data;
 import net.guardiandev.pluto.Pluto;
 import net.guardiandev.pluto.data.Character;
 import net.guardiandev.pluto.data.NetworkText;
+import net.guardiandev.pluto.data.item.Item;
+import net.guardiandev.pluto.data.item.Prefix;
 import net.guardiandev.pluto.entity.player.Player;
 import net.guardiandev.pluto.network.packet.both.*;
 import net.guardiandev.pluto.network.packet.client.*;
@@ -103,8 +105,9 @@ public class LoginHandler {
     public void handlePlayerSlot(PlayerSlot packet) {
         Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
 
+        System.out.println("Slot: " + packet.slotIndex);
         if(player.getState() != 1) return;
-        // TODO
+        player.getInventorySlots()[packet.slotIndex] = new Item(packet.itemNetId, Prefix.fromId(packet.itemPrefix), packet.stackSize);
     }
 
     public void handleRequestWorldData(RequestWorldData packet) {

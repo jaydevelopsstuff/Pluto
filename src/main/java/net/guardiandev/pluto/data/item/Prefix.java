@@ -90,4 +90,11 @@ public enum Prefix {
     Legendary2(84);
 
     public final int id;
+
+    public static Prefix fromId(int id) {
+        for(Prefix prefix : values()) {
+            if(prefix.id == id) return prefix;
+        }
+        return null;
+    }
 }

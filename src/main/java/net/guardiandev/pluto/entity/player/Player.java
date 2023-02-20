@@ -6,6 +6,7 @@ import lombok.Data;
 import net.guardiandev.pluto.Pluto;
 import net.guardiandev.pluto.data.Character;
 import net.guardiandev.pluto.data.NetworkText;
+import net.guardiandev.pluto.data.item.Item;
 import net.guardiandev.pluto.network.handler.LoginHandler;
 import net.guardiandev.pluto.network.handler.PlayHandler;
 import net.guardiandev.pluto.network.packet.both.*;
@@ -42,6 +43,8 @@ public class Player {
     private int mana;
     private int maxMana;
 
+    private Item[] inventorySlots;
+
     public void startKeepAliveTask() {
         /*timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -62,6 +65,12 @@ public class Player {
         NetworkUtil.sendPacket(new PlayerMana((byte)playerId, (short)mana, (short)maxMana), dest);
 
         // Items
+        int index = 0;
+        for(Item slot : inventorySlots) {
+            System.out.println(index);
+            NetworkUtil.sendPacket(new PlayerSlot((byte)playerId, (short)index, (short)slot.getStack(), (byte)(slot.getPrefix() == null ? 0 : slot.getPrefix().id), (short)slot.getItemId()), dest);
+            index++;
+        }
     }
 
     public ChannelFuture sendKeepAlive() {

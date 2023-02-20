@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import net.guardiandev.pluto.Pluto;
+import net.guardiandev.pluto.data.item.Item;
 import net.guardiandev.pluto.entity.player.Player;
 import net.guardiandev.pluto.network.packet.PacketType;
 import net.guardiandev.pluto.network.packet.client.ClientPacket;
@@ -20,6 +21,7 @@ public class GeneralChannelHandler extends ChannelInboundHandlerAdapter {
         player.getLoginHandler().setChannel(ctx.channel());
         player.getPlayHandler().setChannel(ctx.channel());
         player.startKeepAliveTask();
+        player.setInventorySlots(new Item[350]);
         Pluto.playerManager.newPlayer(ctx.channel().id().asShortText(), player);
         Pluto.logger.info("New player connecting");
     }

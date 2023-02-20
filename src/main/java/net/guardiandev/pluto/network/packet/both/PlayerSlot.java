@@ -29,7 +29,7 @@ public class PlayerSlot implements ClientPacket, ServerPacket {
 
     @Override
     public void processPacket(LoginHandler handler) {
-
+        handler.handlePlayerSlot(this);
     }
 
     @Override
