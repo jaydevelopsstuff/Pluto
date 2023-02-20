@@ -43,31 +43,28 @@ public class GeneralChannelHandler extends ChannelInboundHandlerAdapter {
         int initAvailable = buf.readableBytes();
 
         int available = initAvailable;
+
         while(available > 0) {
-            if(available < 2) {
+           /* if(available < 2) {
+                System.out.println("<2 overflow");
                 overflow = new byte[1];
                 buf.writeBytes(overflow);
                 buf.release();
                 previousSize = -1;
                 return;
-            }
-
-            if(available == 17) {
-                buf.release();
-                return;
-            }
+            }*/
 
             int size = buf.readShortLE();
 
-            System.out.println("Size: " + size);
-            if(size > available) {
+            /*if(size > available) {
+                System.out.println("size>available overflow");
                 int overflowCount = size - available;
                 overflow = new byte[overflowCount];
                 buf.writeBytes(overflow);
                 buf.release();
                 previousSize = size;
                 return;
-            }
+            }*/
 
             ByteBuf packetBuf = ctx.alloc().buffer(size - 2);
             buf.readBytes(packetBuf);
@@ -85,7 +82,7 @@ public class GeneralChannelHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void handlePacket(int size, ByteBuf buf, Player player) throws Exception {
-        int rawId = buf.readByte();
+        int rawId = buf.readByte() & 0xFF;
         PacketType type = PacketType.fromID(rawId);
         if(type == null) {
             System.out.println("Invalid packet id: " + rawId);
