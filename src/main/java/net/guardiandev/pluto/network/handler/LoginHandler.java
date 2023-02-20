@@ -142,9 +142,12 @@ public class LoginHandler {
         player.setPlayState(Player.PlayState.Play);
         player.setState(0);
 
+        Pluto.playerManager.broadcast(packet, channel.id().asShortText());
+
         for(Player player1 : Pluto.playerManager.getConnectedPlayers().values()) {
             if(player1 == player) continue;
-            //player.fullSync(player1.getChannel());
+            player.fullSync(player1.getChannel());
+            player1.fullSync(player.getChannel());
         }
 
         Pluto.logger.info("Player " + player.getCharacter().getName() + " (" + player.getPlayerId() + ") has joined.");

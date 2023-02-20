@@ -24,7 +24,7 @@ public enum PacketType {
     Status(9, From.SERVER),
     SendTileSection(10, From.SERVER),
     TileSectionFrame(11, From.SERVER),
-    PlayerSpawn(12, From.CLIENT, net.guardiandev.pluto.network.packet.client.PlayerSpawn.class),
+    PlayerSpawn(12, From.CLIENT, net.guardiandev.pluto.network.packet.both.PlayerSpawn.class),
     PlayerUpdate(13, From.BOTH, net.guardiandev.pluto.network.packet.both.PlayerUpdate.class),
     PlayerActive(14, From.SERVER),
     PlayerHp(16, From.BOTH, PlayerHP.class),

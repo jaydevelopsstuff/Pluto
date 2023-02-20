@@ -46,7 +46,7 @@ public class LoadNetModule implements ClientPacket, ServerPacket {
 
     @Override
     public void writePacket(ByteBuf buf) {
-        buf.writeByte(packet.getModule().id);
+        buf.writeShortLE(packet.getModule().id);
         packet.writePacket(buf);
     }
 

@@ -8,10 +8,7 @@ import net.guardiandev.pluto.data.Character;
 import net.guardiandev.pluto.data.NetworkText;
 import net.guardiandev.pluto.network.handler.LoginHandler;
 import net.guardiandev.pluto.network.handler.PlayHandler;
-import net.guardiandev.pluto.network.packet.both.ManaEffect;
-import net.guardiandev.pluto.network.packet.both.PlayerHP;
-import net.guardiandev.pluto.network.packet.both.PlayerInfo;
-import net.guardiandev.pluto.network.packet.both.PlayerMana;
+import net.guardiandev.pluto.network.packet.both.*;
 import net.guardiandev.pluto.network.packet.server.Disconnect;
 import net.guardiandev.pluto.network.packet.server.KeepAlive;
 import net.guardiandev.pluto.network.packet.server.PlayerActive;
@@ -58,6 +55,7 @@ public class Player {
         NetworkUtil.sendPacket(new PlayerActive((byte)playerId, true), dest);
         NetworkUtil.sendPacket(new PlayerInfo((byte)playerId, character), dest);
         // Update Player
+        NetworkUtil.sendPacket(new PlayerUpdate((byte)getPlayerId(), (byte)0, (byte)0, (byte)0, (byte)0, (byte)0, (float)posX, (float)posY, (float)0, (float)0, (float)0, (float)0, (float)0, (float)0), dest);
         NetworkUtil.sendPacket(new PlayerHP((byte)playerId, (short)hp, (short)maxHp), dest);
         // Toggle PVP
         // Player Team
