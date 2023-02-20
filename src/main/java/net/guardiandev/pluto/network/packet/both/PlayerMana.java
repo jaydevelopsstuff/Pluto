@@ -9,21 +9,23 @@ import net.guardiandev.pluto.network.packet.client.ClientPacket;
 import net.guardiandev.pluto.network.packet.server.ServerPacket;
 
 @AllArgsConstructor
-public class ManaEffect implements ClientPacket, ServerPacket {
+public class PlayerMana implements ClientPacket, ServerPacket {
     public byte playerId;
-    public short manaAmount;
+    public short mana;
+    public short manaMax;
 
-    public ManaEffect() {}
+    public PlayerMana() {}
 
     @Override
     public void readPacket(ByteBuf buf) {
         playerId = buf.readByte();
-        manaAmount = buf.readShortLE();
+        mana = buf.readShortLE();
+        manaMax = buf.readShortLE();
     }
 
     @Override
     public void processPacket(LoginHandler handler) {
-
+        handler.handlePlayerMana(this);
     }
 
     @Override
@@ -39,11 +41,12 @@ public class ManaEffect implements ClientPacket, ServerPacket {
     @Override
     public void writePacket(ByteBuf buf) {
         buf.writeByte(playerId);
-        buf.writeShortLE(manaAmount);
+        buf.writeShortLE(mana);
+        buf.writeShortLE(manaMax);
     }
 
     @Override
     public PacketType getType() {
-        return PacketType.ManaEffect;
+        return PacketType.PlayerMana;
     }
 }

@@ -73,6 +73,7 @@ public class SendTileSection implements ServerPacket {
                 byte header1 = 0;
                 byte header2 = 0;
                 byte header3 = 0;
+                byte header4 = 0;
 
                 Block block = tile.getBlock();
                 Wall wall = tile.getWall();
@@ -96,12 +97,15 @@ public class SendTileSection implements ServerPacket {
                     }
                 }
 
-                Liquid tileLiquid = tile.getLiquid();
-                if(tileLiquid == Liquid.Water) header1 |= waterBit;
+                /*Liquid tileLiquid = tile.getLiquid();
+                if(tileLiquid == Liquid.Shimmer) {
+                    header3 |= 0b1000_0000;
+                    header1 |= 0b0000_1000;
+                } else if(tileLiquid == Liquid.Water) header1 |= waterBit;
                 else if(tileLiquid == Liquid.Lava) header1 |= lavaBit;
-                else if(tileLiquid == Liquid.Honey) header1 |= honeyBit;
+                else if(tileLiquid == Liquid.Honey) header1 |= honeyBit;*/
 
-                if(tile.getWire() == WireType.Red) header2 |= redWireBit;
+                /*if(tile.getWire() == WireType.Red) header2 |= redWireBit;
 
                 if(tile.getWire() == WireType.Blue) header2 |= blueWireBit;
 
@@ -113,18 +117,22 @@ public class SendTileSection implements ServerPacket {
 
                 if(tile.hasActuator()) header3 |= actuatorBit;
 
-                if(tile.isActuated()) header3 |= actuatedBit;
+                if(tile.isActuated()) header3 |= actuatedBit;*/
 
-                if(header2 != 0) header1 |= header2Bit;
+                if(header4 != 0) {
+                    header3 |= header4Bit;
+                }
 
                 if(header3 != 0) {
-                    header1 |= header2Bit;
                     header2 |= header3Bit;
                 }
+
+                if(header2 != 0) header1 |= header2Bit;
 
                 buf.writeByte(header1);
                 if(header2 != 0) buf.writeByte(header2);
                 if(header3 != 0) buf.writeByte(header3);
+                if(header4 != 0) buf.writeByte(header4);
 
                 if(block != null) {
                     if(additBlockByte) buf.writeShortLE(block.getID());
@@ -138,7 +146,7 @@ public class SendTileSection implements ServerPacket {
 
                 if(wall != null) buf.writeByte((byte)wall.getID());
 
-                if(tileLiquid != null) buf.writeByte(tile.getLiquidAmount());
+                //if(tileLiquid != null) buf.writeByte(tile.getLiquidAmount());
 
                 if(additWallByte) buf.writeByte((byte)(wall.getID() >>> 8));
             }
@@ -167,8 +175,10 @@ public class SendTileSection implements ServerPacket {
     private static final byte shapeBits = 0b0111_0000;
 
     // Header 3
+    private static final byte header4Bit = 0b0000_0001;
     private static final byte actuatorBit = 0b0000_0010;
     private static final byte actuatedBit = 0b0000_0100;
+    private static final byte colorBit = 0b0000_1000;
     private static final byte yellowWireBit = 0b0010_0000;
     private static final byte additionalWallByteBit = 0b0100_0000;
 

@@ -12,8 +12,8 @@ public class PlayerBuffs implements ClientPacket, ServerPacket {
     @Override
     public void readPacket(ByteBuf buf) {
         playerId = buf.readByte();
-        for(int i = 0; i < 22; i++) {
-            buf.readShortLE();
+        for(int i = 0; i < 44; i++) {
+            System.out.print(buf.readShortLE() + " - ");
         }
     }
 

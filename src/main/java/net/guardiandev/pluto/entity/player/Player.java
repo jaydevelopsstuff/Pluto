@@ -11,6 +11,7 @@ import net.guardiandev.pluto.network.handler.PlayHandler;
 import net.guardiandev.pluto.network.packet.both.ManaEffect;
 import net.guardiandev.pluto.network.packet.both.PlayerHP;
 import net.guardiandev.pluto.network.packet.both.PlayerInfo;
+import net.guardiandev.pluto.network.packet.both.PlayerMana;
 import net.guardiandev.pluto.network.packet.server.Disconnect;
 import net.guardiandev.pluto.network.packet.server.KeepAlive;
 import net.guardiandev.pluto.network.packet.server.PlayerActive;
@@ -19,7 +20,6 @@ import net.guardiandev.pluto.util.NetworkUtil;
 
 import java.net.InetSocketAddress;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 @Data
@@ -46,12 +46,12 @@ public class Player {
     private int maxMana;
 
     public void startKeepAliveTask() {
-        timer.scheduleAtFixedRate(new TimerTask() {
+        /*timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 sendKeepAlive();
             }
-        }, 500, 30000);
+        }, 500, 30000);*/
     }
 
     public void fullSync(Channel dest) {
@@ -61,7 +61,7 @@ public class Player {
         NetworkUtil.sendPacket(new PlayerHP((byte)playerId, (short)hp, (short)maxHp), dest);
         // Toggle PVP
         // Player Team
-        NetworkUtil.sendPacket(new ManaEffect((byte)playerId, (short)mana, (short)maxMana), dest);
+        NetworkUtil.sendPacket(new PlayerMana((byte)playerId, (short)mana, (short)maxMana), dest);
 
         // Items
     }

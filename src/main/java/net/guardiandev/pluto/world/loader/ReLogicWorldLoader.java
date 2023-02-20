@@ -470,6 +470,10 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
             if(versionNumber >= 238) tenthAnniversary = reader.readBoolean();
             if(versionNumber >= 239) dontStarveWorld = reader.readBoolean();
             if(versionNumber >= 241) notTheBeesWorld = reader.readBoolean();
+            if (versionNumber >= 249) { /*w.RemixWorld =*/ reader.readBoolean(); }
+            if (versionNumber >= 266) { /*w.NoTrapsWorld =*/ reader.readBoolean(); }
+            // w.ZenithWorld = (w.Version < 267) ? w.RemixWorld && w.DrunkWorld : r.ReadBoolean();
+            if(versionNumber >= 267) reader.readBoolean();
         } else {
             if(versionNumber >= 112) difficulty = reader.readBoolean() ? WorldDifficulty.Expert : WorldDifficulty.Classic;
             else difficulty = WorldDifficulty.Classic;
@@ -538,6 +542,9 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
         shadowOrbCount = reader.readByte();
         altarCount = reader.readInt();
         hardmode = reader.readBoolean();
+        if(versionNumber >= 257) {
+            reader.readBoolean(); // After party of doom
+        }
         invasionDelay = reader.readInt();
         invasionSize = reader.readInt();
         invasionType = reader.readInt();
@@ -708,6 +715,57 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
         if(versionNumber >= 240) {
             downedDeerclops = reader.readBoolean();
         }
+
+        if (versionNumber >= 250)
+        {
+            //w.UnlockedSlimeBlueSpawn = r.ReadBoolean();
+            reader.readBoolean();
+        }
+
+        if (versionNumber >= 251)
+        {
+            /*w.UnlockedMerchantSpawn = r.ReadBoolean();
+            w.UnlockedDemolitionistSpawn = r.ReadBoolean();
+            w.UnlockedPartyGirlSpawn = r.ReadBoolean();
+            w.UnlockedDyeTraderSpawn = r.ReadBoolean();
+            w.UnlockedTruffleSpawn = r.ReadBoolean();
+            w.UnlockedArmsDealerSpawn = r.ReadBoolean();
+            w.UnlockedNurseSpawn = r.ReadBoolean();
+            w.UnlockedPrincessSpawn = r.ReadBoolean();*/
+            reader.skipNBytes(8);
+        }
+
+        if (versionNumber >= 259)
+        {
+            //w.CombatBookVolumeTwoWasUsed = r.ReadBoolean();
+            reader.readBoolean();
+        }
+
+        if (versionNumber >= 260)
+        {
+            // w.PeddlersSatchelWasUsed = r.ReadBoolean();
+            reader.readBoolean();
+        }
+
+        if (versionNumber >= 261)
+        {
+            /*w.UnlockedSlimeGreenSpawn = r.ReadBoolean();
+            w.UnlockedSlimeOldSpawn = r.ReadBoolean();
+            w.UnlockedSlimePurpleSpawn = r.ReadBoolean();
+            w.UnlockedSlimeRainbowSpawn = r.ReadBoolean();
+            w.UnlockedSlimeRedSpawn = r.ReadBoolean();
+            w.UnlockedSlimeYellowSpawn = r.ReadBoolean();
+            w.UnlockedSlimeCopperSpawn = r.ReadBoolean();*/
+            reader.skipNBytes(7);
+        }
+
+        if (versionNumber >= 264)
+        {
+            /*w.FastForwardTimeToDusk = r.ReadBoolean();
+            w.MoondialCooldown = r.ReadByte();*/
+            reader.readBoolean();
+            reader.readBoolean();
+        }
     }
 
     protected void loadTiles() throws IOException {
@@ -848,6 +906,7 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
         byte header1 = reader.readByte();
         byte header2 = 0;
         byte header3 = 0;
+        byte header4 = 0;
 
         short tileBlockID = -1;
         short blockU = -1;
@@ -871,7 +930,13 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
             header2 = reader.readByte();
 
             // Check 1st bit on 2nd header to see if we need a 3rd header
-            if((header2 & 1) == 1) header3 = reader.readByte();
+            if((header2 & 1) == 1) {
+                header3 = reader.readByte();
+
+                if(versionNumber >= 269 && (header3 & 1) == 1) {
+                    header4 = reader.readByte();
+                }
+            }
         }
 
         // Check if we have a block
@@ -925,6 +990,12 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
             } else {
                 liquidType = Liquid.Honey;
             }
+
+            // shimmer (v 1.4.4 +)
+            if (versionNumber >= 269 && (header3 & 0b1000_0000) == 0b1000_0000)
+            {
+                liquidType = Liquid.Shimmer;
+            }
         }
 
         // Check if we have data in header 2 other than just telling us we have header 3
@@ -957,6 +1028,26 @@ public class ReLogicWorldLoader extends AbstractWorldLoader {
 
             if(versionNumber >= 222) {
                 if((header3 & 64) == 64) tileWallID = (short)(reader.readUnsignedByte() << 8 | tileWallID);
+            }
+        }
+
+        if (versionNumber >= 269 && header4 > (byte)1)
+        {
+            if ((header4 & 0b0000_0010) == 0b0000_0010)
+            {
+                //tile.InvisibleBlock = true;
+            }
+            if ((header4 & 0b0000_0100) == 0b0000_0100)
+            {
+                //tile.InvisibleWall = true;
+            }
+            if ((header4 & 0b0000_1000) == 0b0000_1000)
+            {
+                //tile.FullBrightBlock = true;
+            }
+            if ((header4 & 0b0001_0000) == 0b0001_0000)
+            {
+                //tile.FullBrightWall = true;
             }
         }
 

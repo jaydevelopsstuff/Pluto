@@ -12,6 +12,7 @@ public class ContinueConnecting implements ServerPacket {
     @Override
     public void writePacket(ByteBuf buf) {
         buf.writeByte(playerId);
+        buf.writeBoolean(false);
     }
 
     @Override

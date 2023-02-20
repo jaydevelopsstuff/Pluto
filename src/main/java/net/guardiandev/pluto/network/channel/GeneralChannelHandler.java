@@ -59,6 +59,7 @@ public class GeneralChannelHandler extends ChannelInboundHandlerAdapter {
 
             int size = buf.readShortLE();
 
+            System.out.println("Size: " + size);
             if(size > available) {
                 int overflowCount = size - available;
                 overflow = new byte[overflowCount];
@@ -84,13 +85,18 @@ public class GeneralChannelHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void handlePacket(int size, ByteBuf buf, Player player) throws Exception {
-        PacketType type = PacketType.fromID(buf.readByte());
-        if(type == null) return;
-        System.out.println("Read:" + type.name());
+        int rawId = buf.readByte();
+        PacketType type = PacketType.fromID(rawId);
+        if(type == null) {
+            System.out.println("Invalid packet id: " + rawId);
+            return;
+        }
+        if(type != PacketType.PlayerSlot) System.out.println("Read:" + type.name() + " [" + rawId + "]");
 
         ClientPacket packet = (ClientPacket)type.instantiateClass();
 
         if(packet == null) {
+            System.out.println("Ignored: " + type.name() + " [" + rawId + "]");
             buf.release();
             return;
         }

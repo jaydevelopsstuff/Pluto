@@ -86,6 +86,11 @@ public class WorldInfo implements ServerPacket {
         buf.writeByte(worldData.eventInfo5);
         buf.writeByte(worldData.eventInfo6);
         buf.writeByte(worldData.eventInfo7);
+        buf.writeByte(0);
+        buf.writeByte(0);
+        buf.writeByte(0); // TODO: Event info 8 (noTrapsWorld, zenithWorld, unlockedTruffleSpawn);
+        buf.writeInt(0); // TODO: Sundial Cooldown
+        buf.writeInt(0); // TODO: Moondial Cooldown
         buf.writeShortLE(worldData.copperTinTier);
         buf.writeShortLE(worldData.ironLeadTier);
         buf.writeShortLE(worldData.silverTungstenTier);

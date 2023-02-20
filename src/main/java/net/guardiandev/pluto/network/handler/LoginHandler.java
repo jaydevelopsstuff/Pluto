@@ -58,6 +58,7 @@ public class LoginHandler {
             if((packet.difficultyFlags & difficulty1.bit) == difficulty1.bit) difficulty = difficulty1;
         }
         if(difficulty == null) {
+            System.out.println(packet.difficultyFlags);
             Pluto.logger.warn("Invalid difficulty flags, defaulting to softcore");
             difficulty = Character.Difficulty.Softcore;
         }
@@ -82,11 +83,11 @@ public class LoginHandler {
         player.setMaxHp(packet.maxHp);
     }
 
-    public void handleManaEffect(ManaEffect packet) {
+    public void handlePlayerMana(PlayerMana packet) {
         Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
 
         if(player.getState() != 1) return;
-        player.setMana(packet.manaAmount);
+        player.setMana(packet.mana);
         player.setMaxMana(packet.manaMax);
     }
 
@@ -118,13 +119,13 @@ public class LoginHandler {
         WorldData worldData = world.getWorldData();
 
         // Send Tile Sections
-        for(int i = 0; i < worldData.maxTilesX / 100; i++) {
+        /*for(int i = 0; i < worldData.maxTilesX / 100; i++) {
             SendTileSection tileSection = new SendTileSection(channel, true, i * 100, 0, (short)100, (short)worldData.maxTilesY, world.getTiles(i * 100, 0, 100, worldData.maxTilesY));
             player.sendPacket(tileSection, 262144);
-        }
+        }*/
 
-        TileSectionFrame sectionFrame = new TileSectionFrame((short)0, (short)0, (short)(worldData.maxTilesX / 200), (short)(worldData.maxTilesY / 150));
-        player.sendPacket(sectionFrame);
+        /*TileSectionFrame sectionFrame = new TileSectionFrame((short)0, (short)0, (short)(worldData.maxTilesX / 200), (short)(worldData.maxTilesY / 150));
+        player.sendPacket(sectionFrame);*/
 
         player.sendPacket(new CompleteConnectionAndSpawn());
         player.setState(3);
@@ -140,7 +141,7 @@ public class LoginHandler {
 
         for(Player player1 : Pluto.playerManager.getConnectedPlayers().values()) {
             if(player1 == player) continue;
-            player.fullSync(player1.getChannel());
+            //player.fullSync(player1.getChannel());
         }
 
         Pluto.logger.info("Player " + player.getCharacter().getName() + " (" + player.getPlayerId() + ") has joined.");

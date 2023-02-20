@@ -10,6 +10,8 @@ public class PlayerSpawn implements ClientPacket {
     public short spawnX;
     public short spawnY;
     public int respawnTimeRemaining;
+    public short numberOfDeathsPVE;
+    public short numberOfDeathsPVP;
     public byte playerSpawnContext;
 
     @Override
@@ -18,6 +20,8 @@ public class PlayerSpawn implements ClientPacket {
         spawnX = buf.readShortLE();
         spawnY = buf.readShortLE();
         respawnTimeRemaining = buf.readIntLE();
+        numberOfDeathsPVE = buf.readShortLE();
+        numberOfDeathsPVP = buf.readShortLE();
         playerSpawnContext = buf.readByte();
     }
 

@@ -30,6 +30,7 @@ public class PlayerInfo implements ClientPacket, ServerPacket {
     public TColor shoeColor;
     public byte difficultyFlags;
     public byte torchFlags;
+    public byte otherFlags;
 
     public PlayerInfo() {
     }
@@ -53,6 +54,7 @@ public class PlayerInfo implements ClientPacket, ServerPacket {
         this.difficultyFlags |= character.getDifficulty().bit;
         if(character.isExtraAccessory()) this.difficultyFlags |= (byte)0b00001000;
         this.torchFlags = character.getTorchFlags();
+        this.otherFlags = 0; // TODO
     }
 
     @Override
@@ -74,6 +76,7 @@ public class PlayerInfo implements ClientPacket, ServerPacket {
         shoeColor = TColor.deserialize(buf);
         difficultyFlags = buf.readByte();
         torchFlags = buf.readByte();
+        otherFlags = buf.readByte();
     }
 
     @Override
