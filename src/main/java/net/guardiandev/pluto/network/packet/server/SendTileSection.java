@@ -15,7 +15,6 @@ import java.util.zip.DeflaterOutputStream;
 @AllArgsConstructor
 public class SendTileSection implements ServerPacket {
     public Channel channel;
-    public boolean compressed;
     public int startX;
     public int startY;
     public short width;
@@ -27,25 +26,23 @@ public class SendTileSection implements ServerPacket {
 
     @Override
     public void writePacket(ByteBuf buf) {
-        buf.writeBoolean(compressed);
+        //buf.writeBoolean(compressed);
         ByteBuf uncompressed = writeUncompressedData();
-        if(compressed) {
-            byte[] uncompressedBytes = new byte[uncompressed.readableBytes()];
-            uncompressed.readBytes(uncompressedBytes);
-            ByteArrayOutputStream compressedStream = new ByteArrayOutputStream();
-            DeflaterOutputStream dos = new DeflaterOutputStream(compressedStream, new Deflater(6, true));
-            try {
-                dos.write(uncompressedBytes);
-                dos.flush();
-                dos.close();
-            } catch(IOException e) {
-                throw new RuntimeException(e);
-            }
 
-            buf.writeBytes(compressedStream.toByteArray());
-        } else {
-            buf.writeBytes(uncompressed);
+        byte[] uncompressedBytes = new byte[uncompressed.readableBytes()];
+        uncompressed.readBytes(uncompressedBytes);
+        ByteArrayOutputStream compressedStream = new ByteArrayOutputStream();
+        DeflaterOutputStream dos = new DeflaterOutputStream(compressedStream, new Deflater(6, true));
+        try {
+            dos.write(uncompressedBytes);
+            dos.flush();
+            dos.close();
+        } catch(IOException e) {
+            throw new RuntimeException(e);
         }
+
+        buf.writeBytes(compressedStream.toByteArray());
+
         uncompressed.release();
     }
 

@@ -5,6 +5,7 @@ import net.guardiandev.pluto.network.packet.client.PlayerBuffs;
 
 import java.lang.reflect.InvocationTargetException;
 
+// TODO: Redo this (out of date)
 /**
  * An enum for all the Packet Types in Terraria
  *
@@ -146,7 +147,16 @@ public enum PacketType {
     SyncCavernMonsterType(136, From.BOTH),
     RequestNPCBuffRemoval(137, From.CLIENT),
     ClientSyncedInventory(138, From.CLIENT),
-    SetCountsAsHostForGameplay(139, From.SERVER);
+    SetCountsAsHostForGameplay(139, From.SERVER),
+    SetMiscEventValues(140, null),
+    RequestLucyPopup(141, null),
+    SyncProjectileTrackers(142, null),
+    CrystalInvasionRequestedToSkipWaitTime(143, null),
+    RequestQuestEffect(144, null),
+    SyncItemsWithShimmer(145, null),
+    ShimmerActions(146, null),
+    SyncLoadout(147, null),
+    SyncItemCannotBeTakenByEnemies(148, null);
 
     /** The Packet's ID in the game */
     public final int ID;

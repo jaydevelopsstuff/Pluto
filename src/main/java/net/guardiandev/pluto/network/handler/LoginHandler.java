@@ -23,6 +23,8 @@ public class LoginHandler {
         Player player = Pluto.playerManager.getPlayer(channel.id().asShortText());
 
         if(player.getState() != 0) return;
+        Pluto.logger.info("Join with version {}", packet.version);
+
         player.setPlayerId(Pluto.playerManager.allocateAvailablePlayerId());
         if(player.getPlayerId() == -1) {
             ServerPacket disconnect = new Disconnect(new NetworkText("Server full", NetworkText.Mode.LITERAL));
@@ -119,11 +121,12 @@ public class LoginHandler {
         WorldData worldData = world.getWorldData();
 
         // Send Tile Sections
-        /*for(int i = 0; i < worldData.maxTilesX / 100; i++) {
-            SendTileSection tileSection = new SendTileSection(channel, true, i * 100, 0, (short)100, (short)worldData.maxTilesY, world.getTiles(i * 100, 0, 100, worldData.maxTilesY));
+        for(int i = 0; i < worldData.maxTilesX / 100; i++) {
+            SendTileSection tileSection = new SendTileSection(channel, i * 100, 0, (short)100, (short)worldData.maxTilesY, world.getTiles(i * 100, 0, 100, worldData.maxTilesY));
             player.sendPacket(tileSection, 262144);
-        }*/
+        }
 
+        // Deprecated
         /*TileSectionFrame sectionFrame = new TileSectionFrame((short)0, (short)0, (short)(worldData.maxTilesX / 200), (short)(worldData.maxTilesY / 150));
         player.sendPacket(sectionFrame);*/
 

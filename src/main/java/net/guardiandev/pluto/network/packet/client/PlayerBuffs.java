@@ -13,7 +13,7 @@ public class PlayerBuffs implements ClientPacket, ServerPacket {
     public void readPacket(ByteBuf buf) {
         playerId = buf.readByte();
         for(int i = 0; i < 44; i++) {
-            System.out.print(buf.readShortLE() + " - ");
+            buf.readShortLE();
         }
     }
 
