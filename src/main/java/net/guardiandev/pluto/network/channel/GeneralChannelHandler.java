@@ -8,6 +8,7 @@ import net.guardiandev.pluto.data.item.Item;
 import net.guardiandev.pluto.entity.player.Player;
 import net.guardiandev.pluto.network.packet.PacketType;
 import net.guardiandev.pluto.network.packet.client.ClientPacket;
+import net.guardiandev.pluto.network.packet.server.PlayerActive;
 
 import java.net.InetSocketAddress;
 
@@ -30,6 +31,7 @@ public class GeneralChannelHandler extends ChannelInboundHandlerAdapter {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         Player player = Pluto.playerManager.getPlayer(ctx.channel().id().asShortText());
         player.destroy();
+        Pluto.playerManager.broadcast(new PlayerActive((byte)player.getPlayerId(), false), ctx.channel().id().asShortText());
         Pluto.logger.info("Destroyed player");
     }
 
