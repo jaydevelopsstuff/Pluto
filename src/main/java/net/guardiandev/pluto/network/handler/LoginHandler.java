@@ -11,6 +11,7 @@ import net.guardiandev.pluto.entity.player.Player;
 import net.guardiandev.pluto.network.packet.both.*;
 import net.guardiandev.pluto.network.packet.client.*;
 import net.guardiandev.pluto.network.packet.server.*;
+import net.guardiandev.pluto.util.TColor;
 import net.guardiandev.pluto.world.World;
 import net.guardiandev.pluto.world.WorldData;
 
@@ -154,5 +155,6 @@ public class LoginHandler {
         }
 
         Pluto.logger.info("Player " + player.getCharacter().getName() + " (" + player.getPlayerId() + ") has joined.");
+        Pluto.playerManager.broadcastText(new NetworkText(player.getCharacter().getName() + " has joined.", NetworkText.Mode.LITERAL), new TColor(0, 255, 0));
     }
 }

@@ -57,7 +57,7 @@ public class Player {
     public void fullSync(Channel dest) {
         NetworkUtil.sendPacket(new PlayerActive((byte)playerId, true), dest);
         NetworkUtil.sendPacket(new PlayerInfo((byte)playerId, character), dest);
-        // Update Player
+        // TODO: Make this better
         NetworkUtil.sendPacket(new PlayerUpdate((byte)getPlayerId(), (byte)0, (byte)0, (byte)0, (byte)0, (byte)0, (float)posX, (float)posY, (float)0, (float)0, (float)0, (float)0, (float)0, (float)0), dest);
         NetworkUtil.sendPacket(new PlayerHP((byte)playerId, (short)hp, (short)maxHp), dest);
         // Toggle PVP

@@ -1,8 +1,11 @@
 package net.guardiandev.pluto.manager;
 
 import lombok.Data;
+import net.guardiandev.pluto.data.NetworkText;
 import net.guardiandev.pluto.entity.player.Player;
+import net.guardiandev.pluto.network.packet.both.LoadNetModule;
 import net.guardiandev.pluto.network.packet.server.ServerPacket;
+import net.guardiandev.pluto.util.TColor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +14,10 @@ import java.util.Map;
 public class PlayerManager {
     private final Map<String, Player> connectedPlayers = new HashMap<>();
     private final boolean[] playerIds = new boolean[256];
+
+    public void broadcastText(NetworkText text, TColor color) {
+        broadcast(new LoadNetModule(new LoadNetModule.Text((byte)255, text, color)));
+    }
 
     public void broadcast(ServerPacket packet) {
         connectedPlayers.forEach((channelId, player) -> player.sendPacket(packet));
