@@ -67,7 +67,6 @@ public class Player {
         // Items
         int index = 0;
         for(Item slot : inventorySlots) {
-            System.out.println(index);
             NetworkUtil.sendPacket(new PlayerSlot((byte)playerId, (short)index, (short)slot.getStack(), (byte)(slot.getPrefix() == null ? 0 : slot.getPrefix().id), (short)slot.getItemId()), dest);
             index++;
         }

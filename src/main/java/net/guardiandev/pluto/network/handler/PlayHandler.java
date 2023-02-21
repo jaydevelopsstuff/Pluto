@@ -29,6 +29,12 @@ public class PlayHandler {
         Pluto.playerManager.broadcast(packet, channel.id().asShortText());
     }
 
+    public void handleProjectileUpdate(ProjectileUpdate packet) {
+        Player player = player();
+
+        Pluto.playerManager.broadcast(packet, channel.id().asShortText());
+    }
+
     public void handlePlayerHP(PlayerHP packet) {
         Player player = player();
 

@@ -36,7 +36,7 @@ public enum PacketType {
     ItemOwner(22, From.BOTH),
     NpcUpdate(23, From.SERVER),
     NpcItemStrike(24, From.BOTH),
-    ProjectileNew(27, From.BOTH),
+    ProjectileNew(27, From.BOTH, ProjectileUpdate.class),
     NpcStrike(28, From.BOTH),
     ProjectileDestroy(29, From.BOTH),
     TogglePvp(30, From.BOTH),
